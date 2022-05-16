@@ -3,10 +3,13 @@ from django.core.management import BaseCommand
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, ConversationHandler
 
-import logging
+from bot_backend.settings import TOKEN
 
-TOKEN = ''
-CHANNEL_NAME = ''
+from .utils import (
+    update_or_create_user,
+)
+
+import logging
 
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -20,16 +23,13 @@ def start(update: Update, context: CallbackContext):
     update.message.reply_text(
         f'Hi {user.username}!'
     )
-    context.user_data.clear()
+
+    update_or_create_user(user)
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /help is issued."""
-    update.message.reply_text(f"""
-1) Чтобы начать: /start\n
-2) Преждевременно отменить /cancel\n
-3) Список направлений, стоящий под сделку: /on_autocorrect
-    """)
+    update.message.reply_text(f"""Чтобы начать: /start\n""")
 
 
 def main() -> None:

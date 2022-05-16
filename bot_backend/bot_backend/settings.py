@@ -25,6 +25,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+TOKEN = os.getenv('TOKEN')
+CHANNEL_NAME = os.getenv('CHANNEL_NAME')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

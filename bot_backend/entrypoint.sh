@@ -1,6 +1,6 @@
 #! /bin/bash
 
-python manage.py migrate default
+python manage.py migrate
 
 if [ "$1" = 'run_bot' ]; then
     exec python manage.py main
