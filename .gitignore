@@ -81,7 +81,8 @@ target/
 *.pyc
 local_settings.py
 
-.env
+*venv
+*.env
 db.sqlite3
 
 *.idea
