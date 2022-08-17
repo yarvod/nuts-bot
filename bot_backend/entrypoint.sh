@@ -1,11 +1,13 @@
 #! /bin/bash
 
+python manage.py makemigrations
 python manage.py migrate
-
-if [ "$1" = 'run_bot' ]; then
-    exec python manage.py main
-fi
-
 python manage.py collectstatic --no-input
 
-exec gunicorn bot_backend.wsgi:application -b 0.0.0.0:8000 --reload
+if [ "$1" = 'run_bot' ]; then
+  exec python manage.py main
+fi
+
+if [ "$1" = 'run_django' ]; then
+  exec gunicorn bot_backend.wsgi:application -b 0.0.0.0:8000 --reload
+fi
