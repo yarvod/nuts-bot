@@ -25,6 +25,8 @@ services:
     build:
       context: ./bot_backend
     container_name: nuts-bot-backend
+    env_file:
+      - .env
     volumes:
       - ./bot_backend/:/app/
       - static:/app/static
@@ -39,6 +41,8 @@ services:
     build:
       context: ./bot_backend
     container_name: nuts-bot-bot
+    env_file:
+      - .env
     depends_on:
       - postgres
     volumes:

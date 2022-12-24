@@ -39,6 +39,8 @@ services:
         delay: 5s
         failure_action: rollback
         order: start-first
+    env_file:
+      - .env
     healthcheck:
       test: curl -sS http://0.0.0.0:8000/healthcheck || echo 1
       interval: 30s
@@ -61,6 +63,8 @@ services:
         delay: 5s
         failure_action: rollback
         order: start-first
+    env_file:
+      - .env
     volumes:
       - ./bot_backend/:/app/
     command: run_bot
