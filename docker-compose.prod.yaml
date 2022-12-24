@@ -28,7 +28,7 @@ services:
     networks:
       - web
 
-  backend:
+  bot_backend:
     image: ghcr.io/yarvod/nuts-bot/bot_backend:latest
     deploy:
       replicas: 1

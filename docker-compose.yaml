@@ -20,7 +20,7 @@ services:
       - "5432:5432"
     restart: always
 
-  backend:
+  bot_backend:
     image: ghcr.io/yarvod/nuts-bot/bot_backend:latest
     build:
       context: ./bot_backend
