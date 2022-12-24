@@ -1,12 +1,22 @@
 
 class Messages:
-    MESSAGE_ORDER = 'Заказ'
-    MESSAGE_CATALOG = 'Каталог'
-    MESSAGE_INFO = 'Общая информация'
-    MESSAGE_CART = 'Корзина'
-    MESSAGE_HISTORY = 'История заказов'
-    MESSAGE_COMMENT = 'Отзыв или комментарий'
-    MESSAGE_WRITE_ATEPAPT = 'Написать лично'
+    ORDER = 'Заказ'
+    CATALOG = 'Каталог'
+    INFO = 'Общая информация'
+    CART = 'Корзина'
+    HISTORY = 'История заказов'
+    COMMENT = 'Отзыв или комментарий'
+    WRITE_ATEPAPT = 'Написать лично'
+    
+    DICT = dict((
+        (ORDER, ORDER),
+        (CATALOG, CATALOG),
+        (INFO, INFO),
+        (CART, CART),
+        (HISTORY, HISTORY),
+        (COMMENT, COMMENT),
+        (WRITE_ATEPAPT, WRITE_ATEPAPT),
+    ))
 
 
 class Weights:
