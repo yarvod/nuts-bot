@@ -1,5 +1,5 @@
 
-class Messages:
+class MainButtons:
     ORDER = 'Заказ'
     CATALOG = 'Каталог'
     INFO = 'Общая информация'

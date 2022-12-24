@@ -8,7 +8,8 @@ import emoji
 import logging
 
 from ... import utils
-from ...constants import Messages
+from ...constants import MainButtons
+from ...messages import MessageGetHelp, MessageInfo, MessageGreeting
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,20 +19,19 @@ logger = logging.getLogger(__name__)
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     buttons = [
-        [KeyboardButton(Messages.ORDER)],
-        [KeyboardButton(Messages.CATALOG)],
-        [KeyboardButton(Messages.INFO)],
-        [KeyboardButton(Messages.CART)],
-        [KeyboardButton(Messages.HISTORY)],
-        [KeyboardButton(Messages.COMMENT)],
-        [KeyboardButton(Messages.WRITE_ATEPAPT)]
+        [KeyboardButton(MainButtons.ORDER)],
+        [KeyboardButton(MainButtons.CATALOG)],
+        [KeyboardButton(MainButtons.INFO)],
+        [KeyboardButton(MainButtons.CART)],
+        [KeyboardButton(MainButtons.HISTORY)],
+        [KeyboardButton(MainButtons.COMMENT)],
+        [KeyboardButton(MainButtons.WRITE_ATEPAPT)]
     ]
 
     user = update.effective_user
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text=f"""
-            {emoji.emojize(":waving_hand:")} Привет, {user.username}! \nЯ - орешковый бот, моя цель - помочь тебе выбрать подходящее лакомство на сегодняшний день/вечер (зависит от времени старта) и договориться о сделке наиболее комфортным способом. \nГотов приступать к работе: используй доступные кнопки для взаимодействия со мной.""",
+        text=MessageGreeting.format(*(emoji.emojize(":waving_hand:"), user.username)),
         reply_markup=ReplyKeyboardMarkup(buttons)
     )
 
@@ -70,6 +70,20 @@ def get_catalog(update: Update, context: CallbackContext):
     )
 
 
+def write_atepart(update: Update, context: CallbackContext):
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=MessageGetHelp
+    )
+
+
+def get_info(update: Update, context: CallbackContext):
+    context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=MessageInfo
+    )
+
+
 def help_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /help is issued."""
     update.message.reply_text(f"""Чтобы начать: /start\n""")
@@ -81,7 +95,9 @@ def main() -> None:
 
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('help', help_command))
-    dispatcher.add_handler(MessageHandler(Filters.regex(Messages.CATALOG), get_catalog))
+    dispatcher.add_handler(MessageHandler(Filters.regex(MainButtons.CATALOG), get_catalog))
+    dispatcher.add_handler(MessageHandler(Filters.regex(MainButtons.WRITE_ATEPAPT), write_atepart))
+    dispatcher.add_handler(MessageHandler(Filters.regex(MainButtons.INFO), get_info))
     dispatcher.add_handler(CommandHandler('product', get_product))
 
     updater.start_polling()
