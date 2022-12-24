@@ -69,7 +69,7 @@ jobs:
       - if: needs.check.outputs.nginx == 'true'
         name: Nginx -- build and push
         run: |
-          docker build nginx/ -t ghcr.io/yarvod/nuts-bot/:latest
+          docker build nginx/ -t ghcr.io/yarvod/nuts-bot/nginx:latest
           docker push ghcr.io/yarvod/nuts-bot/nginx:latest
       - if: needs.check.outputs.postgres == 'true'
         name: Postgres -- build and push
