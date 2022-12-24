@@ -14,7 +14,6 @@ jobs:
     outputs:
       bot_backend: ${{ steps.check_files.outputs.bot_backend }}
       nginx: ${{ steps.check_files.outputs.nginx }}
-      redis: ${{ steps.check_files.outputs.redis }}
       postgres: ${{ steps.check_files.outputs.postgres }}
     environment:
       name: nuts-bot
