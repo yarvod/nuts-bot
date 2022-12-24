@@ -17,8 +17,11 @@ class ProductWeightPriceInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('slug', 'title', 'image_tag', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('slug', 'title',)
     readonly_fields = ('image_detail',)
     inlines = (ProductWeightPriceInline,)
+    actions = ('set_active', 'set_inactive',)
 
     fieldsets = [
         ['Основное', {
@@ -32,19 +35,29 @@ class ProductAdmin(admin.ModelAdmin):
     ]
 
     def image_tag(self, obj):
+        ratio = obj.photo.width / obj.photo.height
         return format_html('<img src="{url}" width="{width}" height={height}/>'.format(
             url=obj.photo.url,
-            width=obj.photo.width // 15,
-            height=obj.photo.height // 15
+            width=50*ratio,
+            height=50
             ))
 
     def image_detail(self, obj):
+        ratio = obj.photo.width / obj.photo.height
         return format_html('<img src="{url}" width="{width}" height={height} />'.format(
             url=obj.photo.url,
-            width=obj.photo.width // 5,
-            height=obj.photo.height // 5,
+            width=200*ratio,
+            height=200,
             )
     )
 
     image_tag.short_description = 'Фото'
     image_detail.short_description = 'Фото превью'
+
+    @admin.action(description='Установить ЕСТЬ в наличии')
+    def set_active(modeladmin, request, queryset):
+        queryset.update(is_active=True)
+
+    @admin.action(description='Установить НЕТ в наличии')
+    def set_inactive(modeladmin, request, queryset):
+        queryset.update(is_active=False)

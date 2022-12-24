@@ -34,8 +34,8 @@ class ProductWeightPrice(models.Model):
 class Order(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='orders', verbose_name='Пользователь')
     is_active = models.BooleanField(default=True, verbose_name='Заказ активен')
-    is_refused = models.BooleanField(default=True, verbose_name='Заказ отменен')
-    is_success = models.BooleanField(default=True, verbose_name='Заказ успешно завершен')
+    is_refused = models.BooleanField(default=False, verbose_name='Заказ отменен')
+    is_success = models.BooleanField(default=False, verbose_name='Заказ успешно завершен')
     created = models.DateTimeField(auto_now=True, verbose_name='Дата создания')
     finished = models.DateTimeField(null=True, blank=True, verbose_name='Дата завершения')
 
