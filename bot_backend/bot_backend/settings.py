@@ -2,10 +2,11 @@ from pathlib import Path
 import os
 import sys
 
+from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 TOKEN = os.getenv('TOKEN')
 CHANNEL_NAME = os.getenv('CHANNEL_NAME')
 
