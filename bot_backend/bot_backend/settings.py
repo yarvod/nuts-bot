@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'imagekit',
     'rest_framework',
+    'storages',
 
     'bot',
 ]
@@ -170,4 +171,18 @@ CORS_ALLOWED_ORIGINS = [
     f"{HTTP}://{HOST}"
 ]
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+
+# STORAGE
+
+YANDEX_BUCKET_NAME = os.environ.get('YANDEX_BUCKET_NAME')
+AWS_S3_ACCESS_KEY_ID = os.environ.get('YANDEX_ACCESS_KEY_ID')
+AWS_S3_SECRET_ACCESS_KEY = os.environ.get('YANDEX_SECRET_ACCESS_KEY')
+AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
+AWS_S3_REGION_NAME = os.environ.get('YANDEX_BUCKET_NAME')
+
+USE_S3 = os.getenv('USE_S3', 'false').lower() == 'true'
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+if USE_S3:
+    DEFAULT_FILE_STORAGE = 'backend_app.storage.UsersMediaStorage'
 
