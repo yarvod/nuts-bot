@@ -49,6 +49,7 @@ services:
     volumes:
       - ./bot_backend/:/app/
       - static:/app/static
+      - media:/app/media
     depends_on:
       - postgres
     command: ["./wait-for-postgres.sh", "--", "sh", "entrypoint.sh", "run_django"]

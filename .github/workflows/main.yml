@@ -73,7 +73,7 @@ jobs:
       - if: needs.check.outputs.postgres == 'true'
         name: Postgres -- build and push
         run: |
-          docker build nginx/ -t ghcr.io/yarvod/nuts-bot/postgres:latest
+          docker build postgres/ -t ghcr.io/yarvod/nuts-bot/postgres:latest
           docker push ghcr.io/yarvod/nuts-bot/postgres:latest
 #  test:
 #    runs-on: ubuntu-latest
