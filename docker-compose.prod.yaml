@@ -29,7 +29,7 @@ services:
       - web
 
   backend:
-    image: ghcr.io/yarvod/nuts-bot/nuts-bot-bot_backend:latest
+    image: ghcr.io/yarvod/nuts-bot/bot_backend:latest
     deploy:
       replicas: 1
       restart_policy:
@@ -51,7 +51,7 @@ services:
       - run_django
 
   bot:
-    image: ghcr.io/yarvod/nuts-bot/nuts-bot-bot_backend:latest
+    image: ghcr.io/yarvod/nuts-bot/bot_backend:latest
     deploy:
       replicas: 1
       restart_policy:
@@ -68,7 +68,7 @@ services:
       - web
 
   nginx:
-    image: ghcr.io/yarvod/nuts-bot/nuts-bot-nginx:latest
+    image: ghcr.io/yarvod/nuts-bot/nginx:latest
     deploy:
       replicas: 1
       restart_policy:
