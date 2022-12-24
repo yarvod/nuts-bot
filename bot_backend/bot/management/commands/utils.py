@@ -1,4 +1,4 @@
-from bot.models import (
+from users.models import (
     User,
 )
 
