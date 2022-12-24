@@ -30,6 +30,7 @@ services:
     volumes:
       - ./bot_backend/:/app/
       - static:/app/static
+      - media:/app/media
     depends_on:
       - postgres
     ports:
