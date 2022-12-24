@@ -44,3 +44,4 @@ urllib3==1.26.9
 wcwidth==0.2.5
 boto3==1.24.39
 django-storages==1.12.3
+django-cors-headers==3.11.0
