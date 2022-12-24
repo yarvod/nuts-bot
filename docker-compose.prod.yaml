@@ -52,6 +52,8 @@ services:
     depends_on:
       - postgres
     command: ["./wait-for-postgres.sh", "--", "sh", "entrypoint.sh", "run_django"]
+    networks:
+      - web
 
   bot:
     image: ghcr.io/yarvod/nuts-bot/bot_backend:latest
