@@ -1,16 +1,6 @@
 from django.db import models
 
-
-class Weights:
-    WT90 = 90
-    WT180 = 180
-    WT500 = 500
-
-    CHOICES = (
-        (WT90, '90 грамм'),
-        (WT180, '180 грамм'),
-        (WT500, '500 грамм'),
-    )
+from bot.constants import Weights
 
 
 class Product(models.Model):

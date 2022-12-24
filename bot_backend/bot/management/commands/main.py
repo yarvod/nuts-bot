@@ -13,30 +13,23 @@ from .utils import (
 
 import logging
 
+from ...constants import Messages
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-MESSAGE_ORDER = 'Заказ'
-MESSAGE_CATALOG = 'Каталог'
-MESSAGE_INFO = 'Общая информация'
-MESSAGE_CART = 'Корзина'
-MESSAGE_HISTORY = 'История заказов'
-MESSAGE_COMMENT = 'Отзыв или комментарий'
-MESSAGE_WRITE_ATEPAPT = 'Написать лично'
 
 
 # funcs
 def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     buttons = [
-        [KeyboardButton(MESSAGE_ORDER)], 
-        [KeyboardButton(MESSAGE_CATALOG)], 
-        [KeyboardButton(MESSAGE_INFO)],
-        [KeyboardButton(MESSAGE_CART)],
-        [KeyboardButton(MESSAGE_HISTORY)],
-        [KeyboardButton(MESSAGE_COMMENT)],
-        [KeyboardButton(MESSAGE_WRITE_ATEPAPT)]
+        [KeyboardButton(Messages.MESSAGE_ORDER)],
+        [KeyboardButton(Messages.MESSAGE_CATALOG)],
+        [KeyboardButton(Messages.MESSAGE_INFO)],
+        [KeyboardButton(Messages.MESSAGE_CART)],
+        [KeyboardButton(Messages.MESSAGE_HISTORY)],
+        [KeyboardButton(Messages.MESSAGE_COMMENT)],
+        [KeyboardButton(Messages.MESSAGE_WRITE_ATEPAPT)]
     ]
 
     user = update.effective_user
@@ -56,24 +49,13 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 
 def main() -> None:
-    """Start the bot."""
-    # Create the Updater and pass it your bot's token.
     updater = Updater(settings.TOKEN)
-
-    # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
-
-    # on different commands - answer in Telegram
 
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler("help", help_command))
 
-    # Start the Bot
     updater.start_polling()
-
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
 

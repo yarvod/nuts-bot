@@ -23,7 +23,7 @@ class ProductAdmin(admin.ModelAdmin):
     fieldsets = [
         ['Основное', {
             'classes': ('wide', 'extrapretty'),
-            'fields': ('slug', 'title', 'description')
+            'fields': ('is_active', 'slug', 'title', 'description')
         }],
         ['Фото', {
             'classes': ('wide', 'extrapretty'),
