@@ -186,5 +186,5 @@ AWS_S3_REGION_NAME = os.environ.get('YANDEX_BUCKET_NAME')
 USE_S3 = os.getenv('USE_S3', 'false').lower() == 'true'
 DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 if USE_S3:
-    DEFAULT_FILE_STORAGE = 'backend_app.storage.UsersMediaStorage'
+    DEFAULT_FILE_STORAGE = 'bot_backend.storage.UsersMediaStorage'
 

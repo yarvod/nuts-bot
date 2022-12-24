@@ -1,9 +1,9 @@
+from django.conf import settings
 from django.core.management import BaseCommand
 
 from telegram import KeyboardButton, ReplyKeyboardMarkup, Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, ConversationHandler
 
-from bot_backend.settings import TOKEN
 
 import emoji
 
@@ -58,7 +58,7 @@ def help_command(update: Update, context: CallbackContext) -> None:
 def main() -> None:
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
-    updater = Updater(TOKEN)
+    updater = Updater(settings.TOKEN)
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
