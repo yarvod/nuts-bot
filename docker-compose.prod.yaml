@@ -49,8 +49,9 @@ services:
     volumes:
       - ./bot_backend/:/app/
       - static:/app/static
-    command:
-      - run_django
+    depends_on:
+      - postgres
+    command: ["./wait-for-postgres.sh", "--", "sh", "entrypoint.sh", "run_django"]
 
   bot:
     image: ghcr.io/yarvod/nuts-bot/bot_backend:latest
@@ -67,7 +68,9 @@ services:
       - .env
     volumes:
       - ./bot_backend/:/app/
-    command: run_bot
+    depends_on:
+      - postgres
+    command: [ "./wait-for-postgres.sh", "--", "sh", "entrypoint.sh", "run_bot" ]
     networks:
       - web
 
