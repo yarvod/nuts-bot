@@ -8,7 +8,7 @@ class Product(models.Model):
     slug = models.SlugField(verbose_name='Идентификатор', db_index=True, help_text='Уникальная строка')
     title = models.CharField(max_length=150, verbose_name='Название')
     description = models.TextField(verbose_name='Описание')
-    photo = models.ImageField(upload_to='media/photos/products', verbose_name='Фото')
+    photo = models.ImageField(upload_to='photos/products', verbose_name='Фото')
 
     class Meta:
         verbose_name = 'Продукт'

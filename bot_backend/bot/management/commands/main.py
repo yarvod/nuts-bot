@@ -39,7 +39,7 @@ def start(update: Update, context: CallbackContext):
     
 
 def get_product(update: Update, context: CallbackContext):
-    slug = update.message.text.replace('/product', '').rstrip('')
+    slug = update.message.text.replace('/product', '').strip()
     product = utils.get_product(slug=slug)
     if not product:
         context.bot.send_message(
