@@ -2,37 +2,63 @@ version : '3.8'
 
 volumes:
   static:
+  media:
 
 services:
 
+  postgres:
+    container_name: nuts-bot-postgres
+    image: ghcr.io/yarvod/nuts-bot/postgres:latest
+    build:
+      context: ./postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    restart: always
+
   backend:
+    image: ghcr.io/yarvod/nuts-bot/bot_backend:latest
     build:
       context: ./bot_backend
     container_name: nuts-bot-backend
     volumes:
       - ./bot_backend/:/app/
       - static:/app/static
+    depends_on:
+      - postgres
     ports:
       - "8000:8000"
-    command:
-      - run_django
+    command: ["./wait-for-postgres.sh", "--", "sh", "entrypoint.sh", "run_django"]
 
   bot:
+    image: ghcr.io/yarvod/nuts-bot/bot_backend:latest
     build:
       context: ./bot_backend
     container_name: nuts-bot-bot
+    depends_on:
+      - postgres
     volumes:
       - ./bot_backend/:/app/
-    command: run_bot
+    command: [ "./wait-for-postgres.sh", "--", "sh", "entrypoint.sh", "run_bot" ]
 
   nginx:
+    image: ghcr.io/yarvod/nuts-bot/nginx:latest
+    container_name: nuts-bot-nginx
+    restart: unless-stopped
+    env_file:
+      - .env
     build:
       context: ./nginx
-    container_name: nuts-bot-nginx
-    depends_on:
-      - backend
     ports:
-      - "80:7000"
+      - "80:80"
+#      - "443:443"
     volumes:
-      - ./nginx:/etc/nginx/conf.d
       - static:/static
+      - media:/media
+#      - ${SSL_CERTIFICATE}:/etc/nginx/certs/cert.pem:ro
+#      - ${SSL_CERTIFICATE_KEY}:/etc/nginx/certs/key.pem:ro
+    depends_on:
+      - bot_backend

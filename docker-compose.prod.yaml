@@ -1,0 +1,104 @@
+version : '3.8'
+
+volumes:
+  static:
+  media:
+
+services:
+
+  postgres:
+    image: ghcr.io/yarvod/nuts-bot/postgres:latest
+    deploy:
+      restart_policy:
+        window: 10s
+        condition: on-failure
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    networks:
+      - web
+
+  backend:
+    image: ghcr.io/yarvod/nuts-bot/nuts-bot-bot_backend:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 5s
+        failure_action: rollback
+        order: start-first
+    healthcheck:
+      test: curl -sS http://0.0.0.0:8000/healthcheck || echo 1
+      interval: 30s
+      timeout: 3s
+      retries: 12
+    volumes:
+      - ./bot_backend/:/app/
+      - static:/app/static
+    command:
+      - run_django
+
+  bot:
+    image: ghcr.io/yarvod/nuts-bot/nuts-bot-bot_backend:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 5s
+        failure_action: rollback
+        order: start-first
+    volumes:
+      - ./bot_backend/:/app/
+    command: run_bot
+    networks:
+      - web
+
+  nginx:
+    image: ghcr.io/yarvod/nuts-bot/nuts-bot-nginx:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 20s
+        failure_action: rollback
+        order: start-first
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s -o /dev/null -I -w '%{http_code}' http://0.0.0.0:9991/ | grep '200' || exit 1" ]
+      interval: 10s
+      timeout: 30s
+      retries: 10
+      start_period: 10s
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+#      - "443:443"
+    volumes:
+      - static:/static
+      - media:/media
+#      - ${SSL_CERTIFICATE}:/etc/nginx/certs/cert.pem:ro
+#      - ${SSL_CERTIFICATE_KEY}:/etc/nginx/certs/key.pem:ro
+    depends_on:
+      - bot_backend
+    networks:
+      - web
+
+networks:
+  web:
+    driver: overlay
+    attachable: true

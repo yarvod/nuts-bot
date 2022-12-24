@@ -1,0 +1,42 @@
+upstream backend {
+	server bot_backend:8000;
+}
+
+#healthcheck
+server {
+    listen 9991;
+    server_name 0.0.0.0;
+    access_log off;
+    error_log off;
+
+    location / {
+        return 200;
+    }
+}
+
+#main
+server {
+
+    server_tokens off;
+    client_max_body_size 20M;
+    add_header X-Frame-Options "SAMEORIGIN";
+
+    location ~ ^/(api|admin|swagger)/(.*)$ {
+        proxy_pass http://backend;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Url-Scheme $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+    }
+
+	location /static/ {
+        autoindex on;
+        alias /static/;
+    }
+
+    location /media/ {
+        autoindex on;
+        alias /media/;
+    }
+}
