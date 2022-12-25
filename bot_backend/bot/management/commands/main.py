@@ -1,3 +1,5 @@
+import re
+
 from django.conf import settings
 from django.core.management import BaseCommand
 
@@ -39,7 +41,9 @@ def start(update: Update, context: CallbackContext):
     
 
 def get_product(update: Update, context: CallbackContext):
-    slug = update.message.text.replace('/product', '').strip()
+    slug = re.findall(r"/prod_(\w*)", update.message.text)[0]
+    if not slug:
+        update.message.reply_text("Продукт не найден :(")
     product = utils.get_product(slug=slug)
     if not product:
         context.bot.send_message(
@@ -63,7 +67,7 @@ def get_product(update: Update, context: CallbackContext):
 
 def get_catalog(update: Update, context: CallbackContext):
     data = utils.get_catalog()
-    text = "\n".join([f"{i+1}. {item['slug']} {item['title']}" for i, item in enumerate(data)])
+    text = "\n".join([f"{i+1}. /prod_{item['slug']} {item['title']}" for i, item in enumerate(data)])
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=text
@@ -98,7 +102,7 @@ def main() -> None:
     dispatcher.add_handler(MessageHandler(Filters.regex(MainButtons.CATALOG), get_catalog))
     dispatcher.add_handler(MessageHandler(Filters.regex(MainButtons.WRITE_ATEPAPT), write_atepart))
     dispatcher.add_handler(MessageHandler(Filters.regex(MainButtons.INFO), get_info))
-    dispatcher.add_handler(CommandHandler('product', get_product))
+    dispatcher.add_handler(MessageHandler(Filters.text, get_product))
 
     updater.start_polling()
     updater.idle()

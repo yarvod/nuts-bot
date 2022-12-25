@@ -17,6 +17,7 @@ HOST = os.environ.get('HOST')
 HTTP = os.environ.get('HTTP')
 
 INSTALLED_APPS = [
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
